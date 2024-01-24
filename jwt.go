@@ -1,17 +1,16 @@
-package jwt
+package auth
 
 import (
 	"errors"
 	"fmt"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/greyaxis/auth/roles"
 )
 
 // TODO: PENDING IMPLIMNETATION CHECK
 type JWTClaims struct {
 	jwt.RegisteredClaims
-	Role roles.Role
+	Role Role
 }
 
 func Sign(claims *JWTClaims, secret []byte) (string, error) {
