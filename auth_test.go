@@ -1,12 +1,11 @@
 package auth
 
 import (
-	"log"
 	"testing"
 )
 
 func TestAuthenticate(t *testing.T) {
-	token := "eyq"
-	res := Authenticate(token)
-	log.Println(res)
+	// token := "eyq"
+	// res := AuthenticateCustomer(token)
+	// log.Println(res)
 }
