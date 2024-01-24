@@ -30,11 +30,11 @@ func Sign(claims *JWTClaims, secret []byte) (string, error) {
 
 func Verify(tokenString string, secret []byte) (*JWTClaims, error) {
 
-	token, err := jwt.ParseWithClaims(tokenString, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, errWhileVerifying := jwt.ParseWithClaims(tokenString, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secret), nil
 	})
-	if err != nil {
-		return &JWTClaims{}, err
+	if errWhileVerifying != nil {
+		return &JWTClaims{}, errWhileVerifying
 	} else if claims, ok := token.Claims.(*JWTClaims); ok {
 		return claims, nil
 	} else {
