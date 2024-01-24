@@ -31,17 +31,26 @@ const (
 )
 
 func (a *Auth) AuthenticateCustomer(ctx iris.Context) {
+	err := authenticationError{
+		Error:   "Unauthorized",
+		Message: "access denies",
+	}
 	var headers authenticateHeaders
 	errReadingHeaders := ctx.ReadHeaders(&headers)
 	if errReadingHeaders != nil {
-		err := authenticationError{
-			Error:   "Unauthorized",
-			Message: "access denies",
-		}
+
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
 	}
+
+	if headers.Authorization == "" {
+		log.Println("auth : empty headers received")
+		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
+			Key("error", err))
+		return
+	}
+
 	// TOKEN WITH REMOVED ALL SPACES FROM TOKEN BECAUSE TOKEN WILL BE IN FORMAT eg. Bearer ey....
 	token := strings.ReplaceAll(headers.Authorization, " ", "")
 
@@ -53,8 +62,8 @@ func (a *Auth) AuthenticateCustomer(ctx iris.Context) {
 		token = strings.Replace(token, "bearer", "", 1)
 	}
 
-	claims, err := jwt.Verify(token, []byte(a.JWT_SECRET))
-	if err != nil {
+	claims, errWhileVerifying := jwt.Verify(token, []byte(a.JWT_SECRET))
+	if errWhileVerifying != nil {
 		log.Println("auth: error occured while verifying the token, err: ", err)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
