@@ -11,6 +11,7 @@ import (
 type JWTClaims struct {
 	jwt.RegisteredClaims
 	Role Role
+	ID   uint `json:"id"`
 }
 
 func Sign(claims *JWTClaims, secret []byte) (string, error) {

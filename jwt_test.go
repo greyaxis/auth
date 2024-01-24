@@ -12,9 +12,10 @@ const (
 
 func TestSign(t *testing.T) {
 
-	var claims JWTClaims
-	claims.Role = RoleCustomer
-	claims.ID = "1"
+	var claims = JWTClaims{
+		Role: RoleCustomer,
+		ID:   1,
+	}
 
 	token, err := Sign(&claims, []byte(TEST_JWT_SECRET))
 	if err != nil {
@@ -27,7 +28,7 @@ func TestSign(t *testing.T) {
 func TestVerifyWithSign(t *testing.T) {
 	var claims JWTClaims
 	claims.Role = RoleCustomer
-	claims.ID = "1"
+	claims.ID = 2
 
 	token, err := Sign(&claims, []byte(TEST_JWT_SECRET))
 	if err != nil {
