@@ -33,7 +33,7 @@ const (
 func (a *Auth) AuthenticateCustomer(ctx iris.Context) {
 	err := authenticationError{
 		Error:   "Unauthorized",
-		Message: "access denies",
+		Message: "access denied",
 	}
 	var headers authenticateHeaders
 	errReadingHeaders := ctx.ReadHeaders(&headers)

@@ -5,11 +5,13 @@ import (
 	"fmt"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/greyaxis/auth/roles"
 )
 
 // TODO: PENDING IMPLIMNETATION CHECK
 type MyCustomClaims struct {
 	jwt.RegisteredClaims
+	Role roles.Role
 }
 
 func Sign(claims *MyCustomClaims, secret []byte) (string, error) {
