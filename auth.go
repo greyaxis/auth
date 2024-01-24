@@ -8,11 +8,6 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-type Auth struct {
-	JWT_SECRET       string
-	ADMIN_JWT_SECRET string
-}
-
 type authenticateHeaders struct {
 	Authorization string `header:"Authorization"`
 }
@@ -30,7 +25,20 @@ const (
 	RequestStateKey string = "state"
 )
 
-func (a *Auth) AuthenticateCustomer(ctx iris.Context) {
+var (
+	JWT_SECRET       string
+	ADMIN_JWT_SECRET string
+)
+
+func Init(JWtSecret string, adminJWTSecret string) {
+	if JWtSecret == "" || adminJWTSecret == "" {
+		panic("empty values provided")
+	}
+	JWT_SECRET = JWtSecret
+	ADMIN_JWT_SECRET = adminJWTSecret
+}
+
+func AuthenticateCustomer(ctx iris.Context) {
 	err := authenticationError{
 		Error:   "Unauthorized",
 		Message: "access denied",
@@ -61,8 +69,8 @@ func (a *Auth) AuthenticateCustomer(ctx iris.Context) {
 		token = strings.Replace(token, "bearer", "", 1)
 	}
 	fmt.Println(token)
-	fmt.Println(a.JWT_SECRET)
-	claims, errWhileVerifying := Verify(token, []byte(a.JWT_SECRET))
+	fmt.Println(JWT_SECRET)
+	claims, errWhileVerifying := Verify(token, []byte(JWT_SECRET))
 	if errWhileVerifying != nil {
 		log.Println("auth: error occured while verifying the token, err: ", errWhileVerifying)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
