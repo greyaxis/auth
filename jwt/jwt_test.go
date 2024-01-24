@@ -14,7 +14,7 @@ const (
 
 func TestSign(t *testing.T) {
 
-	var claims MyCustomClaims
+	var claims JWTClaims
 	claims.Role = roles.RoleCustomer
 	claims.ID = "1"
 
@@ -27,7 +27,7 @@ func TestSign(t *testing.T) {
 }
 
 func TestVerifyWithSign(t *testing.T) {
-	var claims MyCustomClaims
+	var claims JWTClaims
 	claims.Role = roles.RoleCustomer
 	claims.ID = "1"
 
@@ -46,7 +46,7 @@ func TestVerifyWithSign(t *testing.T) {
 }
 
 func TestVerify(t *testing.T) {
-	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxIiwiUm9sZSI6ImF1dGhvcml6ZWRfcGVyc29uIn0.z2AXUHibnSrFrUV7doTMlHxRKItS4SHkG23F417DVzI"
+	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxIiwiUm9sZSI6ImN1c3RvbWVyIn0.z2ZKLMeOo5JKm2PQZ0v-Ckrc4W_Gww_SUcB8wfpdZzo"
 
 	claimsAfterVerification, errOnVerify := Verify(token, []byte(TEST_JWT_SECRET))
 	if errOnVerify != nil {

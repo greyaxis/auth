@@ -23,7 +23,7 @@ type authenticationError struct {
 }
 
 type RequestState struct {
-	jwt.MyCustomClaims
+	jwt.JWTClaims
 }
 
 const (
