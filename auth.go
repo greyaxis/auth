@@ -61,10 +61,10 @@ func (a *Auth) AuthenticateCustomer(ctx iris.Context) {
 		token = strings.Replace(token, "bearer", "", 1)
 	}
 	fmt.Println(token)
-
+	fmt.Println(a.JWT_SECRET)
 	claims, errWhileVerifying := Verify(token, []byte(a.JWT_SECRET))
 	if errWhileVerifying != nil {
-		log.Println("auth: error occured while verifying the token, err: ", err)
+		log.Println("auth: error occured while verifying the token, err: ", errWhileVerifying)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
