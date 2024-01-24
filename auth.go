@@ -56,15 +56,9 @@ func (a *Auth) AuthenticateCustomer(ctx iris.Context) {
 	claims, err := jwt.Verify(token, []byte(a.JWT_SECRET))
 	if err != nil {
 		log.Println("auth: error occured while verifying the token, err: ", err)
-		if errReadingHeaders != nil {
-			err := authenticationError{
-				Error:   "Unauthorized",
-				Message: "access denies",
-			}
-			ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
-				Key("error", err))
-			return
-		}
+		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
+			Key("error", err))
+		return
 	}
 
 	var reqState = RequestState{
