@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
@@ -52,7 +53,7 @@ func (a *Auth) AuthenticateCustomer(ctx iris.Context) {
 
 	// TOKEN WITH REMOVED ALL SPACES FROM TOKEN BECAUSE TOKEN WILL BE IN FORMAT eg. Bearer ey....
 	token := strings.ReplaceAll(headers.Authorization, " ", "")
-
+	fmt.Println(token)
 	// IF STARTS WITH BEARER REMOVE THE BEARER
 	if strings.HasPrefix(token, "Bearer") {
 		token = strings.Replace(token, "Bearer", "", 1)
