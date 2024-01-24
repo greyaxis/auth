@@ -53,7 +53,6 @@ func (a *Auth) AuthenticateCustomer(ctx iris.Context) {
 
 	// TOKEN WITH REMOVED ALL SPACES FROM TOKEN BECAUSE TOKEN WILL BE IN FORMAT eg. Bearer ey....
 	token := strings.ReplaceAll(headers.Authorization, " ", "")
-	fmt.Println(token)
 	// IF STARTS WITH BEARER REMOVE THE BEARER
 	if strings.HasPrefix(token, "Bearer") {
 		token = strings.Replace(token, "Bearer", "", 1)
@@ -61,6 +60,7 @@ func (a *Auth) AuthenticateCustomer(ctx iris.Context) {
 	if strings.HasPrefix(token, "bearer") {
 		token = strings.Replace(token, "bearer", "", 1)
 	}
+	fmt.Println(token)
 
 	claims, errWhileVerifying := Verify(token, []byte(a.JWT_SECRET))
 	if errWhileVerifying != nil {
