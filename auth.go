@@ -124,9 +124,16 @@ func AuthenticateAdmin(ctx iris.Context) {
 		return
 	}
 
+	if claims.Role != RoleAdmin {
+		log.Println("auth: err occured the token has role diffrent than expected that is ", claims.Role)
+		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
+			Key("error", err))
+		return
+	}
 	var reqState = RequestState{
 		*claims,
 	}
+
 	ctx.Values().Set(RequestStateKey, reqState)
 	ctx.RegisterDependency(reqState)
 	ctx.Next()
