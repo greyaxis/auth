@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"log"
 	"strings"
 
@@ -68,11 +67,17 @@ func AuthenticateCustomer(ctx iris.Context) {
 	if strings.HasPrefix(token, "bearer") {
 		token = strings.Replace(token, "bearer", "", 1)
 	}
-	fmt.Println(token)
-	fmt.Println(JWT_SECRET)
+
 	claims, errWhileVerifying := Verify(token, []byte(JWT_SECRET))
 	if errWhileVerifying != nil {
 		log.Println("auth: error occured while verifying the token, err: ", errWhileVerifying)
+		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
+			Key("error", err))
+		return
+	}
+
+	if claims.Role != RoleCustomer {
+		log.Println("auth: err occured the token has role diffrent than expected that is ", claims.Role)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
