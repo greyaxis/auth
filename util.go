@@ -12,10 +12,12 @@ func ReadJWTFromHeaders(ctx iris.Context, secret string) (*JWTClaims, error) {
 	var headers authenticateHeaders
 	errReadingHeaders := ctx.ReadHeaders(&headers)
 	if errReadingHeaders != nil {
+		fmt.Println("no headers")
 		return nil, fmt.Errorf("no headers")
 	}
 
 	if headers.Authorization == "" {
+		fmt.Println("headers empty")
 		return nil, fmt.Errorf("empty headers")
 	}
 
