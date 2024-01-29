@@ -30,6 +30,7 @@ func ReadJWTFromHeaders(ctx iris.Context, secret string) (*JWTClaims, error) {
 	}
 
 	claims, errWhileVerifying := Verify(token, []byte(secret))
+	fmt.Println(claims, errWhileVerifying)
 	if errWhileVerifying != nil {
 		return nil, errReadingHeaders
 	}
