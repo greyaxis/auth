@@ -31,11 +31,11 @@ func ReadJWTFromHeaders(ctx iris.Context, secret string) (*JWTClaims, error) {
 		token = strings.Replace(token, "bearer", "", 1)
 	}
 
-	fmt.Println(token)
+	fmt.Println("received token", token)
 	claims, errWhileVerifying := Verify(token, []byte(secret))
 	fmt.Println(claims, errWhileVerifying)
 	if errWhileVerifying != nil {
-		return nil, errReadingHeaders
+		return nil, errWhileVerifying
 	}
 
 	return claims, nil
