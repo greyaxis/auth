@@ -3,6 +3,8 @@ package auth
 import (
 	"log"
 	"testing"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
 const (
@@ -53,4 +55,11 @@ func TestVerify(t *testing.T) {
 	}
 	t.Log(claimsAfterVerification)
 	log.Println(claimsAfterVerification)
+}
+
+type myCustomClaims struct {
+	jwt.RegisteredClaims
+	Role    Role
+	AgentID string
+	ID      uint `json:"id"`
 }

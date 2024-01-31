@@ -10,8 +10,9 @@ import (
 // TODO: PENDING IMPLIMNETATION CHECK
 type JWTClaims struct {
 	jwt.RegisteredClaims
-	Role Role
-	ID   uint `json:"id"`
+	Role    Role
+	ID      uint   `json:"id"`
+	AgentID string `json:"agentID"`
 }
 
 func Sign(claims *JWTClaims, secret []byte) (string, error) {
