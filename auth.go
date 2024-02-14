@@ -20,6 +20,10 @@ type RequestState struct {
 	JWTClaims
 }
 
+type RequestStateDigiGoldPartner struct {
+	JWTClaimsDigiGoldPartner
+}
+
 const (
 	RequestStateKey string = "state"
 )
@@ -237,6 +241,60 @@ func AuthenticateDigiGoldPartner(ctx iris.Context) {
 
 	var reqState = RequestState{
 		*claims,
+	}
+
+	if claims.Role != RoleDigiGoldPartner {
+		log.Println("auth: err occured the token has role diffrent than expected that is ", claims.Role)
+		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
+			Key("error", err))
+		return
+	}
+	ctx.Values().Set(RequestStateKey, reqState)
+	ctx.RegisterDependency(reqState)
+	ctx.Next()
+}
+func AuthenticateDigiGoldPartnerV2(ctx iris.Context) {
+	err := authenticationError{
+		Error:   "Unauthorized",
+		Message: "access denied",
+	}
+	var headers authenticateHeaders
+	errReadingHeaders := ctx.ReadHeaders(&headers)
+	if errReadingHeaders != nil {
+
+		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
+			Key("error", err))
+		return
+	}
+
+	if headers.Authorization == "" {
+		log.Println("auth : empty headers received")
+		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
+			Key("error", err))
+		return
+	}
+
+	// TOKEN WITH REMOVED ALL SPACES FROM TOKEN BECAUSE TOKEN WILL BE IN FORMAT eg. Bearer ey....
+	token := strings.ReplaceAll(headers.Authorization, " ", "")
+	// IF STARTS WITH BEARER REMOVE THE BEARER
+	if strings.HasPrefix(token, "Bearer") {
+		token = strings.Replace(token, "Bearer", "", 1)
+	}
+	if strings.HasPrefix(token, "bearer") {
+		token = strings.Replace(token, "bearer", "", 1)
+	}
+
+	c := JWTClaimsDigiGoldPartner{}
+	claims, errWhileVerifying := c.Verify(token, []byte(JWT_SECRET))
+	if errWhileVerifying != nil {
+		log.Println("auth: error occured while verifying the token, err: ", errWhileVerifying)
+		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
+			Key("error", err))
+		return
+	}
+
+	var reqState = RequestStateDigiGoldPartner{
+		claims,
 	}
 
 	if claims.Role != RoleDigiGoldPartner {
