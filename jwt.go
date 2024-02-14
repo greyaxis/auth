@@ -15,6 +15,13 @@ type JWTClaims struct {
 	AgentID string `json:"agentID"`
 }
 
+type JWTClaimsDigiGoldPartner struct {
+	jwt.RegisteredClaims
+	Role    Role
+	ID      uint   `json:"id"`
+	AgentID string `json:"agentID"`
+}
+
 func Sign(claims *JWTClaims, secret []byte) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
@@ -43,5 +50,35 @@ func Verify(tokenString string, secret []byte) (*JWTClaims, error) {
 		// log.Fatal("unknown claims type, cannot proceed")
 
 		return &JWTClaims{}, errors.New("unknown claims type, cannot proceed")
+	}
+}
+func (claims *JWTClaimsDigiGoldPartner) Sign(secret []byte) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	// Sign and get the complete encoded token as a string using the secret
+	tokenString, err := token.SignedString(secret)
+
+	fmt.Println(tokenString, err)
+
+	if err != nil {
+		return tokenString, err
+	}
+
+	return tokenString, nil
+}
+
+func (claims *JWTClaimsDigiGoldPartner) Verify(tokenString string, secret []byte) (JWTClaimsDigiGoldPartner, error) {
+
+	token, errWhileVerifying := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(secret), nil
+	})
+	if errWhileVerifying != nil {
+		return *claims, errWhileVerifying
+	} else if claims, ok := token.Claims.(JWTClaimsDigiGoldPartner); ok {
+		return claims, nil
+	} else {
+		// log.Fatal("unknown claims type, cannot proceed")
+
+		return claims, errors.New("unknown claims type, cannot proceed")
 	}
 }
