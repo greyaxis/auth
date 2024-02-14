@@ -63,3 +63,24 @@ type myCustomClaims struct {
 	AgentID string
 	ID      uint `json:"id"`
 }
+
+func TestCustom(t *testing.T) {
+	claims := JWTClaimsDigiGoldPartner{
+		ID:      111,
+		AgentID: "testing",
+	}
+
+	secret := "supersecret"
+	jwt, err := claims.Sign([]byte(secret))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("token : ", jwt)
+
+	verifiedClaims, errWhileVerifying := claims.Verify(jwt, []byte(secret))
+	if errWhileVerifying != nil {
+		log.Fatal(errWhileVerifying)
+	}
+	log.Println(verifiedClaims.AgentID)
+}

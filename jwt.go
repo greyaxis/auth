@@ -67,14 +67,14 @@ func (claims *JWTClaimsDigiGoldPartner) Sign(secret []byte) (string, error) {
 	return tokenString, nil
 }
 
-func (claims *JWTClaimsDigiGoldPartner) Verify(tokenString string, secret []byte) (JWTClaimsDigiGoldPartner, error) {
+func (claims *JWTClaimsDigiGoldPartner) Verify(tokenString string, secret []byte) (*JWTClaimsDigiGoldPartner, error) {
 
-	token, errWhileVerifying := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+	token, errWhileVerifying := jwt.ParseWithClaims(tokenString, &JWTClaimsDigiGoldPartner{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secret), nil
 	})
 	if errWhileVerifying != nil {
-		return *claims, errWhileVerifying
-	} else if claims, ok := token.Claims.(JWTClaimsDigiGoldPartner); ok {
+		return claims, errWhileVerifying
+	} else if claims, ok := token.Claims.(*JWTClaimsDigiGoldPartner); ok {
 		return claims, nil
 	} else {
 		// log.Fatal("unknown claims type, cannot proceed")
