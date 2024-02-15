@@ -106,7 +106,7 @@ func (claims *JWTClaimsAdmin) Sign(secret []byte) (string, error) {
 
 func (claims *JWTClaimsAdmin) Verify(tokenString string, secret []byte) (*JWTClaimsAdmin, error) {
 
-	token, errWhileVerifying := jwt.ParseWithClaims(tokenString, &JWTClaimsDigiGoldPartner{}, func(token *jwt.Token) (interface{}, error) {
+	token, errWhileVerifying := jwt.ParseWithClaims(tokenString, &JWTClaimsAdmin{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secret), nil
 	})
 	if errWhileVerifying != nil {
