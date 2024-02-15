@@ -125,3 +125,34 @@ func (claims *JWTClaimsAdmin) Verify(tokenString string, secret []byte) (*JWTCla
 		return claims, errors.New("unknown claims type, cannot proceed")
 	}
 }
+
+func (claims *JWTClaimsDigitalBackOfficeUser) Sign(secret []byte) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	// Sign and get the complete encoded token as a string using the secret
+	tokenString, err := token.SignedString(secret)
+
+	fmt.Println(tokenString, err)
+
+	if err != nil {
+		return tokenString, err
+	}
+
+	return tokenString, nil
+}
+
+func (claims *JWTClaimsDigitalBackOfficeUser) Verify(tokenString string, secret []byte) (*JWTClaimsDigitalBackOfficeUser, error) {
+
+	token, errWhileVerifying := jwt.ParseWithClaims(tokenString, &JWTClaimsDigitalBackOfficeUser{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(secret), nil
+	})
+	if errWhileVerifying != nil {
+		return claims, errWhileVerifying
+	} else if claims, ok := token.Claims.(*JWTClaimsDigitalBackOfficeUser); ok {
+		return claims, nil
+	} else {
+		// log.Fatal("unknown claims type, cannot proceed")
+
+		return claims, errors.New("unknown claims type, cannot proceed")
+	}
+}
