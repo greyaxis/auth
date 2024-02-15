@@ -24,6 +24,10 @@ type RequestStateDigiGoldPartner struct {
 	JWTClaimsDigiGoldPartner
 }
 
+type RequestAdminState struct {
+	JWTClaimsAdmin
+}
+
 const (
 	RequestStateKey string = "state"
 )
@@ -125,7 +129,8 @@ func AuthenticateAdmin(ctx iris.Context) {
 		token = strings.Replace(token, "bearer", "", 1)
 	}
 
-	claims, errWhileVerifying := Verify(token, []byte(ADMIN_JWT_SECRET))
+	c := JWTClaimsAdmin{}
+	claims, errWhileVerifying := c.Verify(token, []byte(ADMIN_JWT_SECRET))
 	if errWhileVerifying != nil {
 		log.Println("auth: error occured while verifying the token, err: ", errWhileVerifying)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
@@ -139,7 +144,7 @@ func AuthenticateAdmin(ctx iris.Context) {
 			Key("error", err))
 		return
 	}
-	var reqState = RequestState{
+	var reqState = RequestAdminState{
 		*claims,
 	}
 
