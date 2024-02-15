@@ -308,7 +308,7 @@ func AuthenticateDigitalBackOfficePartner(ctx iris.Context) {
 		*claims,
 	}
 
-	if claims.Role != RoleDigiGoldPartner {
+	if claims.Role != RoleDigitalBackOfficeUser {
 		log.Println("auth: err occured the token has role diffrent than expected that is ", claims.Role)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
