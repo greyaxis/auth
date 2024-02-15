@@ -28,6 +28,12 @@ type JWTClaimsAdmin struct {
 	ID   uint `json:"id"`
 }
 
+type JWTClaimsDigitalBackOfficeUser struct {
+	jwt.RegisteredClaims
+	Role Role
+	ID   uint `json:"id"`
+}
+
 func Sign(claims *JWTClaims, secret []byte) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
