@@ -130,6 +130,7 @@ func AuthenticateAdmin(ctx iris.Context) {
 	}
 
 	c := JWTClaimsAdmin{}
+	log.Println("ADMIN_JWT_SECRET", ADMIN_JWT_SECRET)
 	claims, errWhileVerifying := c.Verify(token, []byte(ADMIN_JWT_SECRET))
 	if errWhileVerifying != nil {
 		log.Println("auth: error occured while verifying the token, err: ", errWhileVerifying)

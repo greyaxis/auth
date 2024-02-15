@@ -65,9 +65,8 @@ type myCustomClaims struct {
 }
 
 func TestCustom(t *testing.T) {
-	claims := JWTClaimsDigiGoldPartner{
-		ID:      111,
-		AgentID: "testing",
+	claims := JWTClaimsAdmin{
+		ID: 111,
 	}
 
 	secret := "supersecret"
@@ -77,10 +76,10 @@ func TestCustom(t *testing.T) {
 	}
 
 	log.Println("token : ", jwt)
-
-	verifiedClaims, errWhileVerifying := claims.Verify(jwt, []byte(secret))
+	vclaims := JWTClaimsAdmin{}
+	verifiedClaims, errWhileVerifying := vclaims.Verify(jwt, []byte(secret))
 	if errWhileVerifying != nil {
 		log.Fatal(errWhileVerifying)
 	}
-	log.Println(verifiedClaims.AgentID)
+	log.Println(verifiedClaims.ID)
 }
