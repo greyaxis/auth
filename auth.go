@@ -264,7 +264,7 @@ func AuthenticateDigiGoldPartner(ctx iris.Context) {
 	ctx.RegisterDependency(reqState)
 	ctx.Next()
 }
-func AuthenticateDigitalBackOfficePartner(ctx iris.Context) {
+func AuthenticateDigitalBackOfficeUser(ctx iris.Context) {
 	err := authenticationError{
 		Error:   "Unauthorized",
 		Message: "access denied",
