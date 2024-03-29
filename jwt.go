@@ -5,15 +5,16 @@ import (
 	"fmt"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 // TODO: PENDING IMPLIMNETATION CHECK
 type JWTClaims struct {
 	jwt.RegisteredClaims
 	Role      Role
-	ID        uint   `json:"id"`
-	AgentID   string `json:"agentID"`
-	SessionID string `json:"sessionID"`
+	ID        uint      `json:"id"`
+	AgentID   string    `json:"agentID"`
+	SessionID uuid.UUID `json:"sessionID"`
 }
 
 type JWTClaimsDigiGoldPartner struct {
