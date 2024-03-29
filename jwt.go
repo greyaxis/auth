@@ -10,28 +10,32 @@ import (
 // TODO: PENDING IMPLIMNETATION CHECK
 type JWTClaims struct {
 	jwt.RegisteredClaims
-	Role    Role
-	ID      uint   `json:"id"`
-	AgentID string `json:"agentID"`
+	Role      Role
+	ID        uint   `json:"id"`
+	AgentID   string `json:"agentID"`
+	SessionID string `json:"sessionID"`
 }
 
 type JWTClaimsDigiGoldPartner struct {
 	jwt.RegisteredClaims
-	Role    Role
-	ID      uint   `json:"id"`
-	AgentID string `json:"agentID"`
+	Role      Role
+	ID        uint   `json:"id"`
+	AgentID   string `json:"agentID"`
+	SessionID string `json:"sessionID"`
 }
 
 type JWTClaimsAdmin struct {
 	jwt.RegisteredClaims
-	Role Role
-	ID   uint `json:"id"`
+	Role      Role
+	ID        uint   `json:"id"`
+	SessionID string `json:"sessionID"`
 }
 
 type JWTClaimsDigitalBackOfficeUser struct {
 	jwt.RegisteredClaims
-	Role Role
-	ID   uint `json:"id"`
+	Role      Role
+	ID        uint   `json:"id"`
+	SessionID string `json:"sessionID"`
 }
 
 func Sign(claims *JWTClaims, secret []byte) (string, error) {

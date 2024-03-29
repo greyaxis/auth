@@ -8,5 +8,6 @@ const (
 	RoleDigiGoldPartner       Role = "digi_gold_partner"
 	RoleCustomer              Role = "customer"
 	RoleAdmin                 Role = "admin"
+	RolePublic                Role = "public"
 	RoleDigitalBackOfficeUser Role = "role_digital_back_office_user"
 )
