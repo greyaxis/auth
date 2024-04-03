@@ -384,5 +384,6 @@ func Authenticate(ctx iris.Context) {
 	state.Role = Role(headers.Role)
 	ctx.Values().Set(RequestStateKey, state)
 	ctx.RegisterDependency(state)
+	ctx.Next()
 
 }
