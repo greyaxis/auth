@@ -368,7 +368,7 @@ func Authenticate(ctx iris.Context) {
 	byteToken, err := base64.StdEncoding.DecodeString(token)
 	if err != nil {
 		log.Println("byteToken, err:=base64.StdEncoding.DecodeString(token), err: ", err)
-		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().Key("error", unknownHeaderTypeErr))
+		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().Key("error", unauthorizedErr))
 		return
 	}
 
