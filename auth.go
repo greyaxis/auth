@@ -346,6 +346,7 @@ func Authenticate(ctx iris.Context) {
 	var headers GatewayHeaders
 	err := ctx.ReadHeaders(&headers)
 	if err != nil {
+		log.Println("err reading headers from auth.Authenticate, err: ", err)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", unauthorizedErr))
 		return
