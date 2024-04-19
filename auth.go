@@ -352,6 +352,7 @@ func Authenticate(ctx iris.Context) {
 			Key("error", unauthorizedErr))
 		return
 	}
+	log.Println("received headers: ", ctx.Request().Header)
 
 	parts := strings.Split(headers.Authorization, " ")
 	if len(parts) != 2 {
