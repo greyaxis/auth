@@ -374,6 +374,7 @@ func Authenticate(ctx iris.Context) {
 	}
 
 	if strings.Compare(string(byteToken), INTERSVC_API_KEY) != 0 {
+		log.Println("comparison failed")
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().Key("error", unauthorizedErr))
 		return
 	}
