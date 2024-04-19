@@ -373,8 +373,10 @@ func Authenticate(ctx iris.Context) {
 		return
 	}
 
-	if strings.Compare(string(byteToken), INTERSVC_API_KEY) != 0 {
+	if strings.Compare(strings.TrimSpace(string(byteToken)), INTERSVC_API_KEY) != 0 {
 		log.Println("comparison failed")
+		log.Println("token received: ", string(byteToken), " len:", len(string(byteToken)))
+		log.Println("token actual: ", INTERSVC_API_KEY, " len:", len(INTERSVC_API_KEY))
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().Key("error", unauthorizedErr))
 		return
 	}
