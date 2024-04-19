@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
+
 	"github.com/kataras/iris/v12"
 )
 
@@ -354,8 +355,12 @@ func Authenticate(ctx iris.Context) {
 
 	parts := strings.Split(headers.Authorization, " ")
 	if len(parts) != 2 {
-		log.Println("token was splitted but the legnth is not enough, parts:", parts)
-		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().Key("error", unknownHeaderTypeErr))
+		log.Println("token was splitted but the legnth is not enough setting request as public request, parts:", parts)
+		var state RequestState
+		state.Role = RolePublic
+		ctx.Values().Set(RequestStateKey, state)
+		ctx.RegisterDependency(state)
+		ctx.Next()
 		return
 	}
 	if strings.ToLower(parts[0]) != "bearer" {
