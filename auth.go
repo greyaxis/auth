@@ -370,7 +370,7 @@ func Authenticate(ctx iris.Context) {
 	}
 
 	token := parts[1]
-
+	log.Println("token in base64 : ", token)
 	byteToken, err := base64.StdEncoding.DecodeString(token)
 	if err != nil {
 		log.Println("byteToken, err:=base64.StdEncoding.DecodeString(token), err: ", err)
