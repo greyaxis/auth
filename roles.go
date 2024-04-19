@@ -12,7 +12,7 @@ const (
 	RoleDigitalBackOfficeUser Role = "role_digital_back_office_user"
 )
 
-func HasPermission(userRole string, accessibleRoles []string) bool {
+func HasPermission(userRole Role, accessibleRoles []Role) bool {
 	for _, role := range accessibleRoles {
 		if userRole == role {
 			return true
