@@ -15,6 +15,7 @@ type JWTClaims struct {
 	ID        uint      `json:"id"`
 	AgentID   string    `json:"agentID"`
 	SessionID uuid.UUID `json:"sessionID"`
+	Phone     string    `json:"phone"`
 }
 
 type JWTClaimsDigiGoldPartner struct {
