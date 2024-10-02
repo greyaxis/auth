@@ -43,7 +43,7 @@ func TestVerifyWithSign(t *testing.T) {
 		t.Fatal("err while verifying ", err)
 	}
 	t.Log(claimsAfterVerification)
-	log.Println(claimsAfterVerification)
+	DebugLog(claimsAfterVerification)
 }
 
 func TestVerify(t *testing.T) {
@@ -54,7 +54,7 @@ func TestVerify(t *testing.T) {
 		t.Fatal("err while verifying ", errOnVerify)
 	}
 	t.Log(claimsAfterVerification)
-	log.Println(claimsAfterVerification)
+	DebugLog(claimsAfterVerification)
 }
 
 type myCustomClaims struct {
@@ -75,11 +75,11 @@ func TestCustom(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	log.Println("token : ", jwt)
+	DebugLog("token : ", jwt)
 	vclaims := JWTClaimsAdmin{}
 	verifiedClaims, errWhileVerifying := vclaims.Verify(jwt, []byte(secret))
 	if errWhileVerifying != nil {
 		log.Fatal(errWhileVerifying)
 	}
-	log.Println(verifiedClaims.ID)
+	DebugLog(verifiedClaims.ID)
 }

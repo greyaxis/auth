@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
@@ -46,7 +45,7 @@ func Sign(claims *JWTClaims, secret []byte) (string, error) {
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString(secret)
 
-	fmt.Println(tokenString, err)
+	DebugLog(tokenString, err)
 
 	if err != nil {
 		return tokenString, err
@@ -76,7 +75,7 @@ func (claims *JWTClaimsDigiGoldPartner) Sign(secret []byte) (string, error) {
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString(secret)
 
-	fmt.Println(tokenString, err)
+	DebugLog(tokenString, err)
 
 	if err != nil {
 		return tokenString, err
@@ -107,7 +106,7 @@ func (claims *JWTClaimsAdmin) Sign(secret []byte) (string, error) {
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString(secret)
 
-	fmt.Println(tokenString, err)
+	DebugLog(tokenString, err)
 
 	if err != nil {
 		return tokenString, err
@@ -138,7 +137,7 @@ func (claims *JWTClaimsDigitalBackOfficeUser) Sign(secret []byte) (string, error
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString(secret)
 
-	fmt.Println(tokenString, err)
+	DebugLog(tokenString, err)
 
 	if err != nil {
 		return tokenString, err

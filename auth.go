@@ -2,7 +2,6 @@ package auth
 
 import (
 	"encoding/base64"
-	"log"
 	"strings"
 
 	"github.com/google/uuid"
@@ -42,15 +41,17 @@ var (
 	JWT_SECRET       string
 	ADMIN_JWT_SECRET string
 	INTERSVC_API_KEY string
+	DebugMode        bool
 )
 
-func Init(JWtSecret string, adminJWTSecret string, interSVCAPIKey string) {
+func Init(JWtSecret string, adminJWTSecret string, interSVCAPIKey string, debugMode bool) {
 	if JWtSecret == "" || adminJWTSecret == "" {
 		panic("empty values provided")
 	}
 	JWT_SECRET = JWtSecret
 	ADMIN_JWT_SECRET = adminJWTSecret
 	INTERSVC_API_KEY = interSVCAPIKey
+	debugMode = DebugMode
 }
 
 func AuthenticateCustomer(ctx iris.Context) {
@@ -68,7 +69,7 @@ func AuthenticateCustomer(ctx iris.Context) {
 	}
 
 	if headers.Authorization == "" {
-		log.Println("auth : empty headers received")
+		DebugLog("auth : empty headers received")
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
@@ -86,14 +87,14 @@ func AuthenticateCustomer(ctx iris.Context) {
 
 	claims, errWhileVerifying := Verify(token, []byte(JWT_SECRET))
 	if errWhileVerifying != nil {
-		log.Println("auth: error occured while verifying the token, err: ", errWhileVerifying)
+		DebugLog("auth: error occured while verifying the token, err: ", errWhileVerifying)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
 	}
 
 	if claims.Role != RoleCustomer {
-		log.Println("auth: err occured the token has role diffrent than expected that is ", claims.Role)
+		DebugLog("auth: err occured the token has role diffrent than expected that is ", claims.Role)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
@@ -121,7 +122,7 @@ func AuthenticateAdmin(ctx iris.Context) {
 	}
 
 	if headers.Authorization == "" {
-		log.Println("auth : empty headers received")
+		DebugLog("auth : empty headers received")
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
@@ -141,14 +142,14 @@ func AuthenticateAdmin(ctx iris.Context) {
 
 	claims, errWhileVerifying := c.Verify(token, []byte(ADMIN_JWT_SECRET))
 	if errWhileVerifying != nil {
-		log.Println("auth: error occured while verifying the token, err: ", errWhileVerifying)
+		DebugLog("auth: error occured while verifying the token, err: ", errWhileVerifying)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
 	}
 
 	if claims.Role != RoleAdmin {
-		log.Println("auth: err occured the token has role diffrent than expected that is ", claims.Role)
+		DebugLog("auth: err occured the token has role diffrent than expected that is ", claims.Role)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
@@ -176,7 +177,7 @@ func AuthenticateAuthorizedPerson(ctx iris.Context) {
 	}
 
 	if headers.Authorization == "" {
-		log.Println("auth : empty headers received")
+		DebugLog("auth : empty headers received")
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
@@ -194,7 +195,7 @@ func AuthenticateAuthorizedPerson(ctx iris.Context) {
 
 	claims, errWhileVerifying := Verify(token, []byte(JWT_SECRET))
 	if errWhileVerifying != nil {
-		log.Println("auth: error occured while verifying the token, err: ", errWhileVerifying)
+		DebugLog("auth: error occured while verifying the token, err: ", errWhileVerifying)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
@@ -205,7 +206,7 @@ func AuthenticateAuthorizedPerson(ctx iris.Context) {
 	}
 
 	if claims.Role != RoleAuthorizedPerson {
-		log.Println("auth: err occured the token has role diffrent than expected that is ", claims.Role)
+		DebugLog("auth: err occured the token has role diffrent than expected that is ", claims.Role)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
@@ -230,7 +231,7 @@ func AuthenticateDigiGoldPartner(ctx iris.Context) {
 	}
 
 	if headers.Authorization == "" {
-		log.Println("auth : empty headers received")
+		DebugLog("auth : empty headers received")
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
@@ -249,7 +250,7 @@ func AuthenticateDigiGoldPartner(ctx iris.Context) {
 	c := JWTClaimsDigiGoldPartner{}
 	claims, errWhileVerifying := c.Verify(token, []byte(JWT_SECRET))
 	if errWhileVerifying != nil {
-		log.Println("auth: error occured while verifying the token, err: ", errWhileVerifying)
+		DebugLog("auth: error occured while verifying the token, err: ", errWhileVerifying)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
@@ -260,7 +261,7 @@ func AuthenticateDigiGoldPartner(ctx iris.Context) {
 	}
 
 	if claims.Role != RoleDigiGoldPartner {
-		log.Println("auth: err occured the token has role diffrent than expected that is ", claims.Role)
+		DebugLog("auth: err occured the token has role diffrent than expected that is ", claims.Role)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
@@ -284,7 +285,7 @@ func AuthenticateDigitalBackOfficeUser(ctx iris.Context) {
 	}
 
 	if headers.Authorization == "" {
-		log.Println("auth : empty headers received")
+		DebugLog("auth : empty headers received")
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
@@ -303,7 +304,7 @@ func AuthenticateDigitalBackOfficeUser(ctx iris.Context) {
 	c := JWTClaimsDigitalBackOfficeUser{}
 	claims, errWhileVerifying := c.Verify(token, []byte(JWT_SECRET))
 	if errWhileVerifying != nil {
-		log.Println("auth: error occured while verifying the token, err: ", errWhileVerifying)
+		DebugLog("auth: error occured while verifying the token, err: ", errWhileVerifying)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
@@ -314,7 +315,7 @@ func AuthenticateDigitalBackOfficeUser(ctx iris.Context) {
 	}
 
 	if claims.Role != RoleDigitalBackOfficeUser {
-		log.Println("auth: err occured the token has role diffrent than expected that is ", claims.Role)
+		DebugLog("auth: err occured the token has role diffrent than expected that is ", claims.Role)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", err))
 		return
@@ -347,16 +348,16 @@ func Authenticate(ctx iris.Context) {
 	var headers GatewayHeaders
 	err := ctx.ReadHeaders(&headers)
 	if err != nil {
-		log.Println("err reading headers from auth.Authenticate, err: ", err)
+		DebugLog("err reading headers from auth.Authenticate, err: ", err)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().
 			Key("error", unauthorizedErr))
 		return
 	}
-	log.Println("received headers: ", ctx.Request().Header)
+	DebugLog("received headers: ", ctx.Request().Header)
 
 	parts := strings.Split(headers.Authorization, " ")
 	if len(parts) != 2 {
-		log.Println("token was splitted but the legnth is not enough setting request as public request, parts:", parts)
+		DebugLog("token was splitted but the legnth is not enough setting request as public request, parts:", parts)
 		var state RequestState
 		state.Role = RolePublic
 		ctx.Values().Set(RequestStateKey, state)
@@ -365,24 +366,24 @@ func Authenticate(ctx iris.Context) {
 		return
 	}
 	if strings.ToLower(parts[0]) != "bearer" {
-		log.Println("token type was not bearer")
+		DebugLog("token type was not bearer")
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().Key("error", unknownHeaderTypeErr))
 		return
 	}
 
 	token := parts[1]
-	log.Println("token in base64 : ", token)
+	DebugLog("token in base64 : ", token)
 	byteToken, err := base64.StdEncoding.DecodeString(token)
 	if err != nil {
-		log.Println("byteToken, err:=base64.StdEncoding.DecodeString(token), err: ", err)
+		DebugLog("byteToken, err:=base64.StdEncoding.DecodeString(token), err: ", err)
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().Key("error", unauthorizedErr))
 		return
 	}
 
 	if strings.Compare(strings.TrimSpace(string(byteToken)), INTERSVC_API_KEY) != 0 {
-		log.Println("comparison failed")
-		log.Println("token received: ", string(byteToken), " len:", len(string(byteToken)))
-		log.Println("token actual: ", INTERSVC_API_KEY, " len:", len(INTERSVC_API_KEY))
+		DebugLog("comparison failed")
+		DebugLog("token received: ", string(byteToken), " len:", len(string(byteToken)))
+		DebugLog("token actual: ", INTERSVC_API_KEY, " len:", len(INTERSVC_API_KEY))
 		ctx.StopWithProblem(iris.StatusUnauthorized, iris.NewProblem().Key("error", unauthorizedErr))
 		return
 	}
