@@ -10,11 +10,12 @@ import (
 // TODO: PENDING IMPLIMNETATION CHECK
 type JWTClaims struct {
 	jwt.RegisteredClaims
-	Role      Role
-	ID        uint      `json:"id"`
-	AgentID   string    `json:"agentID"`
-	SessionID uuid.UUID `json:"sessionID"`
-	Phone     string    `json:"phone"`
+	Role       Role
+	ClientCode string    `json:"clientCode"`
+	ID         uint      `json:"id"`
+	AgentID    string    `json:"agentID"`
+	SessionID  uuid.UUID `json:"sessionID"`
+	Phone      string    `json:"phone"`
 }
 
 type JWTClaimsDigiGoldPartner struct {
